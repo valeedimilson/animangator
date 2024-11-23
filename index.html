@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ANIMEMANGATOR - GERENCIADOR DE ANIMES E MANGÁS</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <!-- Tela de Login -->
+    <div id="login-container">
+      <h2>Login</h2>
+      <form id="login-form" autocomplete="off">
+        <input
+          autocomplete="off"
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Nome de usuário"
+          required
+        />
+        <input
+          autocomplete="off"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Senha"
+          required
+        />
+        <label>
+          <input type="checkbox" id="remember-me" /> Manter-me conectado
+        </label>
+        <button type="submit">Entrar</button>
+      </form>
+      <p>
+        Não tem uma conta? <a href="#" onclick="showRegister()">Cadastre-se</a>
+      </p>
+    </div>
+
+    <!-- Tela de Cadastro -->
+    <div id="register-container" style="display: none">
+      <h2>Cadastro</h2>
+      <form id="register-form" autocomplete="off">
+        <input
+          autocomplete="off"
+          type="text"
+          name="register-username"
+          id="register-username"
+          placeholder="Nome de usuário"
+          required
+        />
+        <input
+          autocomplete="off"
+          type="password"
+          name="register-password"
+          id="register-password"
+          placeholder="Senha"
+          required
+        />
+        <button type="submit">Cadastrar</button>
+      </form>
+      <p>Já tem uma conta? <a href="#" onclick="showLogin()">Faça login</a></p>
+    </div>
+
+    <div id="app" style="display: none">
+      <h2>ANIMEMANGATOR - GERENCIADOR DE ANIMES E MANGÁS</h2>
+      <header>
+        <!-- Barra de Pesquisa e Filtros -->
+        <div id="filter-container">
+          <form>
+            <div class="search-container">
+              <input
+                autocomplete="off"
+                type="search"
+                name="search-bar"
+                id="search-bar"
+                placeholder="🔍Pesquisar..."
+              />
+            </div>
+            <div id="filter-checkboxes">
+              <label>
+                <input type="checkbox" id="filter-anime" checked />
+                Anime
+              </label>
+              <label>
+                <input type="checkbox" id="filter-manga" checked />
+                Manga
+              </label>
+            </div>
+          </form>
+        </div>
+        <div>
+          <button class="button" onclick="openAddModal()" alt="adicionar Item">
+            📝
+          </button>
+          <button class="button" onclick="openSettingsModal()">⚙️</button>
+          <button class="button" id="toggle-mode">☀️</button>
+          <button class="button logoff" onclick="logoff()">🚪</button>
+        </div>
+      </header>
+
+      <div id="container">Nenhum Mangá ou Anime adicionado</div>
+
+      <!-- Modais e demais elementos... -->
+
+      <!-- Modal para adicionar novos itens -->
+      <div id="add-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">Adicionar Novo Item</div>
+          <div>Nome:</div>
+          <div>
+            <input
+              autocomplete="off"
+              type="text"
+              id="add-name"
+              placeholder="Nome"
+            />
+            <div id="suggestions-add" class="suggestions"></div>
+          </div>
+          <div>
+            Tipo:
+            <select id="add-type">
+              <option value="Anime">Anime</option>
+              <option value="Manga">Manga</option>
+            </select>
+          </div>
+          <div>Capa:</div>
+          <div>
+            <input
+              autocomplete="off"
+              type="text"
+              id="add-thumbnail"
+              placeholder="Thumbnail URL"
+            />
+          </div>
+          <div>URL do capitulo/Episódio:</div>
+          <div>
+            <input
+              autocomplete="off"
+              type="text"
+              id="add-url"
+              placeholder="URL"
+            />
+          </div>
+          <div>Último visualizado:</div>
+          <div>
+            <input
+              autocomplete="off"
+              type="text"
+              id="add-episode"
+              placeholder="Último Episódio"
+              value="1"
+            />
+          </div>
+          <div class="modal-footer">
+            <button class="btAdicionar" onclick="addItem()">Adicionar</button>
+            <button class="btCancelar" onclick="closeAddModal()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal para edição de URL e Capítulo assistido -->
+      <div id="edit-specific-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">Editar URL e Capítulo Assistido</div>
+          <div>URL do capítulo/Episódio:</div>
+          <div>
+            <input
+              autocomplete="off"
+              type="text"
+              id="edit-specific-url"
+              placeholder="URL"
+            />
+          </div>
+          <div>Último visualizado:</div>
+          <div>
+            <button
+              class="btUpDown"
+              onClick="somaSubtraiNumero('-','edit-specific-episode')"
+            >
+              🔻
+            </button>
+            <input
+              autocomplete="off"
+              type="number"
+              id="edit-specific-episode"
+              placeholder="Último Episódio"
+            />
+            <button
+              class="btUpDown"
+              onClick="somaSubtraiNumero('+','edit-specific-episode')"
+            >
+              🔺
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button class="btSalvar" onclick="updateSpecificItem()">
+              Salvar
+            </button>
+            <button class="btCancelar" onclick="closeEditSpecificModal()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal para edição geral -->
+      <div id="edit-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">Editar Item</div>
+          <div>Nome:</div>
+          <div>
+            <input
+              autocomplete="off"
+              type="text"
+              id="edit-name"
+              placeholder="Nome"
+            />
+            <div id="suggestions-edit" class="suggestions"></div>
+          </div>
+          <div>
+            Tipo:
+            <select id="edit-type">
+              <option value="Anime">Anime</option>
+              <option value="Manga">Manga</option>
+            </select>
+          </div>
+          <div>Capa:</div>
+          <div>
+            <input
+              autocomplete="off"
+              type="text"
+              id="edit-thumbnail"
+              placeholder="Thumbnail URL"
+            />
+          </div>
+          <div>
+            URL do capítulo/Episódio:
+            <input
+              autocomplete="off"
+              type="text"
+              id="edit-url"
+              placeholder="URL"
+            />
+          </div>
+          <div>Último visualizado:</div>
+          <div>
+            <button
+              class="btUpDown"
+              onClick="somaSubtraiNumero('-','edit-episode')"
+            >
+              🔻
+            </button>
+            <input
+              autocomplete="off"
+              type="number"
+              id="edit-episode"
+              placeholder="Último Episódio"
+            />
+            <button
+              class="btUpDown"
+              onClick="somaSubtraiNumero('+','edit-episode')"
+            >
+              🔺
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button class="btSalvar" onclick="updateItem()">Salvar</button>
+            <button class="btDeletar" onclick="deleteItem()">Excluir</button>
+            <button class="btCancelar" onclick="closeEditModal()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Modal para configurações do usuário -->
+      <div id="settings-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">Configurações do Usuário</div>
+          <div class="item1">
+            <div>Alterar Senha:</div>
+            <div>
+              <input
+                autocomplete="off"
+                type="password"
+                id="new-password"
+                placeholder="Nova Senha"
+              />
+            </div>
+            <div>
+              <input
+                autocomplete="off"
+                type="password"
+                id="confirm-password"
+                placeholder="Confirmar Nova Senha"
+              />
+            </div>
+
+            <div class="modal-footer">
+              <button class="btSalvar" onclick="updatePassword()">
+                Salvar Senha
+              </button>
+              <button class="btCancelar" onclick="closeSettingsModal()">
+                Cancelar
+              </button>
+            </div>
+          </div>
+          <div class="item2">
+            <button onclick="exportList()">
+              <span style="font-size: 24px">📤</span>Exportar Lista
+            </button>
+            <button onclick="importList()">
+              <span style="font-size: 24px">📥</span>Importar Lista
+            </button>
+            <input
+              type="file"
+              id="import-file"
+              style="display: none"
+              accept=".json"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="login.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="darkMode.js" defer></script>
+  </body>
+</html>
