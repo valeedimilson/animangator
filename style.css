@@ -5,11 +5,13 @@
   --text-light: #333;
   --text-dark: #f4f4f4;
   --card-background-light: #fff;
-  --card-background-dark: #1e1e1e;
+  --card-background-dark: #4c4c4c;
+  --app-background-dark: #1e1e1e;
+  --app-background-light: #efefef;
   --border-light: #ddd;
   --border-dark: #333;
   --button-background-light: #007bff;
-  --button-background-dark: #6200ea;
+  --button-background-dark: #0065ea;
   --button-text-light: #fff;
   --button-text-dark: #fff;
 }
@@ -18,16 +20,32 @@ header {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  align-items: start;
+  align-items: center;
+
+  & .logo {
+    padding-left: 15px;
+    & img {
+      width: 200px;
+    }
+  }
+  & input {
+    border-radius: 8px;
+    border: 1px solid #000;
+  }
 }
 @media (max-width: 600px) {
   header {
     width: 100%;
     display: flex;
-    flex-direction: column-reverse;
+    /* flex-direction: column-reverse; */
+    flex-direction: column;
 
     justify-content: center;
     align-items: center;
+
+    & #filter-container{
+      margin: 5px;
+    }
   }
 }
 
@@ -57,7 +75,7 @@ body {
   width: 100%;
   min-height: 100%;
   max-width: calc(100vw - 2%);
-  background: var(--card-background-light);
+  background: var(--app-background-light);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -218,7 +236,7 @@ body.dark-mode {
 body.dark-mode #login-container,
 body.dark-mode #register-container,
 body.dark-mode #app {
-  background: var(--card-background-dark);
+  background: var(--app-background-dark);
 }
 
 body.dark-mode input[type="text"],
