@@ -107,10 +107,12 @@ function filterCards() {
     const originalIndex = cards.findIndex(
       (c) => c.name === card.name && c.type === card.type
     );
+    const thumbnailContainer = document.createElement("div");
+    thumbnailContainer.setAttribute("class", "thumbnailContainer");
     const cardElement = document.createElement("div");
     cardElement.className = "card";
 
-    let cardElementimgThumbnail = document.createElement("img");
+    const cardElementimgThumbnail = document.createElement("img");
     cardElementimgThumbnail.setAttribute("src", card.thumbnail);
     cardElementimgThumbnail.setAttribute(
       "onclick",
@@ -121,7 +123,7 @@ function filterCards() {
       "onerror",
       "this.onerror=null;this.src='404.jpg';"
     );
-    let cardElementspan = document.createElement("span");
+    const cardElementspan = document.createElement("span");
     cardElementspan.setAttribute(
       "onclick",
       `openCardAndEdit(${originalIndex})`
@@ -129,21 +131,21 @@ function filterCards() {
     cardElementspan.setAttribute("style", `font-weight:bold`);
     cardElementspan.textContent = `${card.name}`;
 
-    let cardElementdiv = document.createElement("div");
+    const cardElementdiv = document.createElement("div");
     cardElementdiv.textContent = `Tipo: ${card.type}`;
 
-    let cardElementdiv2 = document.createElement("div");
+    const cardElementdiv2 = document.createElement("div");
     cardElementdiv2.textContent = `${
       card.type == "Manga" ? "capitulo" : "episodio"
     }: ${card.lastEpisode}`;
-    let cardElementButton = document.createElement("button");
+    const cardElementButton = document.createElement("button");
     cardElementButton.setAttribute(
       "onclick",
       `openEditModal(${originalIndex})`
     );
     cardElementButton.textContent = `Editar`;
-
-    cardElement.appendChild(cardElementimgThumbnail);
+    thumbnailContainer.appendChild(cardElementimgThumbnail);
+    cardElement.appendChild(thumbnailContainer);
     cardElement.appendChild(cardElementspan);
     cardElement.appendChild(cardElementdiv);
     cardElement.appendChild(cardElementdiv2);
@@ -168,8 +170,10 @@ function openCardAndEdit(index) {
   const card = cards[index];
   document.getElementById("edit-specific-url").value = card.url;
   document.getElementById("edit-specific-episode").value = card.lastEpisode;
-  document.getElementById("edit-specific-modal").style.display = "flex";
+
   window.open(card.url, "_blank");
+
+  document.getElementById("edit-specific-modal").style.display = "flex";
 }
 
 // Função para fechar o modal específico
@@ -294,8 +298,6 @@ function openSettingsModal() {
 function closeSettingsModal() {
   document.getElementById("settings-modal").style.display = "none";
 }
-
-
 
 // Função para exportar a lista
 function exportList() {
@@ -450,3 +452,13 @@ function somaSubtraiNumero(operacao, elemento) {
   elem.value = operacao === "+" ? valorAnterior + 1 : valorAnterior - 1;
 }
 
+function buttonTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
+
+document.addEventListener("contextmenu", function (event) {
+  event.preventDefault(); // Desabilita o menu de contexto
+});
